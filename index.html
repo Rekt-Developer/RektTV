@@ -1,59 +1,209 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" prefix="og: http://ogp.me/ns#">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced IPTV Player</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>Advanced IPTV Player - Free Live TV Channels</title>
+    <meta name="description" content="Watch free live TV channels from around the world. Extensive collection of validated IPTV streams.">
+    <meta name="keywords" content="IPTV, free live TV, streaming, live channels, online television">
+    <meta name="author" content="RektDevelopers">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rektdevelopers.com/iptv-player">
+    <meta property="og:title" content="Advanced IPTV Player - Free Live TV Channels">
+    <meta property="og:description" content="Watch free live TV channels from around the world. Extensive collection of validated IPTV streams.">
+    <meta property="og:image" content="https://rektdevelopers.com/iptv-banner.jpg">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://rektdevelopers.com/iptv-player">
+    <meta name="twitter:title" content="Advanced IPTV Player - Free Live TV Channels">
+    <meta name="twitter:description" content="Watch free live TV channels from around the world. Extensive collection of validated IPTV streams.">
+    <meta name="twitter:image" content="https://rektdevelopers.com/iptv-banner.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://rektdevelopers.com/favicon.png">
+    
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
+        :root {
+            --bg-primary: #121212;
+            --bg-secondary: #1f1f1f;
+            --text-primary: #ffffff;
+            --accent-color: #1e90ff;
+            --hover-color: #4169e1;
+        }
+        
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-        h1 {
-            text-align: center;
-            margin-top: 20px;
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
         }
-        .channel-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
         }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background-color: var(--bg-secondary);
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+        
+        .channel-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
         .channel {
-            background-color: #1f1f1f;
-            border-radius: 8px;
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .channel:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .channel-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .channel-info {
             padding: 15px;
             text-align: center;
-            width: 200px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
-        .channel img {
-            width: 100%;
-            border-radius: 5px;
+        
+        .channel-name {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--text-primary);
         }
-        .channel h2 {
-            font-size: 16px;
-            margin: 10px 0;
+        
+        .channel-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .channel a {
-            color: #1e90ff;
+        
+        .watch-btn {
+            background-color: var(--accent-color);
+            color: var(--text-primary);
             text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
-        .loading {
+        
+        .watch-btn:hover {
+            background-color: var(--hover-color);
+        }
+        
+        .loading, .error {
             text-align: center;
-            font-size: 18px;
-            margin-top: 50px;
+            padding: 50px;
+            font-size: 1.2rem;
+        }
+        
+        .telegram-join {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #0088cc;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .telegram-join:hover {
+            transform: scale(1.05);
+        }
+        
+        .telegram-join img {
+            width: 30px;
+            margin-right: 10px;
+        }
+        
+        #telegramPopup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--bg-secondary);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 999;
         }
     </style>
 </head>
 <body>
-    <h1>Advanced IPTV Player</h1>
-    <div class="loading" id="loading">Loading channels...</div>
-    <div class="channel-container" id="channelContainer"></div>
+    <div class="container">
+        <header>
+            <h1>Advanced IPTV Player</h1>
+            <p>Free Live TV Channels from Around the World</p>
+        </header>
+        
+        <div id="loading" class="loading">Loading channels...</div>
+        <div id="error" class="error"></div>
+        <div id="channelContainer" class="channel-container"></div>
+    </div>
+    
+    <a href="#" id="telegramJoin" class="telegram-join">
+        <img src="https://telegram.org/img/w_logo.png" alt="Telegram">
+        Join Our Community
+    </a>
+    
+    <div id="overlay"></div>
+    <div id="telegramPopup">
+        <h2>Join RektDevelopers Telegram</h2>
+        <p>Get the latest updates, exclusive content, and support!</p>
+        <a href="https://t.me/RektDevelopers" target="_blank" class="watch-btn">Join Now</a>
+        <button onclick="closeTelegramPopup()" style="margin-top: 10px; background: none; border: none; color: var(--accent-color); cursor: pointer;">Close</button>
+    </div>
 
     <script>
         const m3uUrl = "https://gitlab.com/-/snippets/2494570/raw/main/free%20channels.m3u";
@@ -76,7 +226,7 @@
             lines.forEach((line) => {
                 if (line.startsWith("#EXTINF:")) {
                     const info = line.match(/tvg-logo="(.*?)".*?,(.*)/);
-                    currentChannel.logo = info ? info[1] : "";
+                    currentChannel.logo = info ? info[1] : "https://via.placeholder.com/250x200?text=No+Logo";
                     currentChannel.name = info ? info[2].trim() : "Unknown Channel";
                 } else if (line.startsWith("http")) {
                     currentChannel.url = line.trim();
@@ -93,7 +243,7 @@
             const validChannels = [];
             for (const channel of channels) {
                 try {
-                    const response = await fetch(channel.url, { method: "HEAD" });
+                    const response = await fetch(channel.url, { method: "HEAD", timeout: 5000 });
                     if (response.ok) {
                         validChannels.push(channel);
                     }
@@ -107,10 +257,10 @@
         // Render channels to the DOM
         function renderChannels(channels) {
             const container = document.getElementById("channelContainer");
-            container.innerHTML = ""; // Clear loading text or previous content
+            container.innerHTML = "";
 
             if (channels.length === 0) {
-                container.innerHTML = "<p>No valid channels found.</p>";
+                document.getElementById("error").textContent = "No valid channels found.";
                 return;
             }
 
@@ -118,27 +268,49 @@
                 const channelElement = document.createElement("div");
                 channelElement.className = "channel";
                 channelElement.innerHTML = `
-                    <img src="${channel.logo}" alt="${channel.name}">
-                    <h2>${channel.name}</h2>
-                    <a href="${channel.url}" target="_blank">Watch Now</a>
+                    <img src="${channel.logo}" alt="${channel.name}" class="channel-image" onerror="this.src='https://via.placeholder.com/250x200?text=No+Image'">
+                    <div class="channel-info">
+                        <h2 class="channel-name">${channel.name}</h2>
+                        <div class="channel-actions">
+                            <a href="${channel.url}" class="watch-btn" target="_blank">Watch Live</a>
+                        </div>
+                    </div>
                 `;
                 container.appendChild(channelElement);
             });
         }
 
+        // Telegram Popup Management
+        document.getElementById('telegramJoin').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('telegramPopup').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        });
+
+        function closeTelegramPopup() {
+            document.getElementById('telegramPopup').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        document.getElementById('overlay').addEventListener('click', closeTelegramPopup);
+
         // Main function
         async function main() {
+            const loadingElement = document.getElementById("loading");
+            const errorElement = document.getElementById("error");
+
             try {
                 const m3uData = await fetchM3U(m3uUrl);
                 const channels = parseM3U(m3uData);
                 const validChannels = await validateChannels(channels);
                 renderChannels(validChannels);
+                loadingElement.style.display = "none";
             } catch (error) {
-                document.getElementById("channelContainer").innerHTML = `
+                loadingElement.style.display = "none";
+                errorElement.innerHTML = `
                     <p style="color: red;">Error loading channels: ${error.message}</p>
+                    <p>Please check your internet connection or try again later.</p>
                 `;
-            } finally {
-                document.getElementById("loading").style.display = "none";
             }
         }
 
